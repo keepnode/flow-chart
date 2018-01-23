@@ -1,7 +1,7 @@
 Chart.ready(() => {
     const basicX = 150;
     const startY = 20;
-    const endY = 350;
+    const endY = 550;
     const newX = 50;
     const newY = 50;
 
@@ -13,8 +13,9 @@ Chart.ready(() => {
         }
 
         let infoPanel = $('.right');
-        infoPanel.find('.proc-name').text(data.name || '');
-        infoPanel.find('.proc-desc').text(data.desc || '');
+        infoPanel.find('#inputTitle').val(data.name || '');
+        infoPanel.find('#inputRemark').text(data.desc || '');
+        infoPanel.find('#inputRemark').text(data.desc || '');
     };
 
     let _hideNodeInfo = () => {
