@@ -13,15 +13,24 @@ Chart.ready(() => {
         }
 
         let infoPanel = $('.right');
-        infoPanel.find('#inputTitle').val(data.name || '');
-        infoPanel.find('#inputRemark').text(data.desc || '');
-        infoPanel.find('#inputRemark').text(data.desc || '');
+        infoPanel.find('#inputTitle').val(data.name || ''); //结点名称
+        infoPanel.find('#inputRemark').text(data.description || ''); //结点备注
+        infoPanel.find("#ddlOperate").val(data.operate||''); //结点操作
+        infoPanel.find("#inputLimit").val(data.limittime||'0'); //限制时间
+        infoPanel.find("#inputCreator").val(data.creatorid||''); //创建人
+        infoPanel.find("#inputCreateTime").val(data.createtime|| ''); // 创建时间
+        // flag 标志(1表示起点，2表示终点，默认为0)
     };
 
     let _hideNodeInfo = () => {
         _showNodeInfo({
             name: '',
-            desc: ''
+            description: '',
+            operate: '',
+            limittime: '',
+            creatorid: '',
+            createtime: '',
+            flag:0
         });
     };
 
@@ -41,12 +50,13 @@ Chart.ready(() => {
     let chart = _createChart();
 
     //添加开始节点
-    let nodeStart = chart.addNode('开始', basicX, startY, {
+    let nodeStart = chart.addNode('起点', basicX, startY, {
         class: 'node-start',
         removable: false,
         data: {
-            name: '开始',
-            nodeType: 0
+            name: '起点',
+            flag: 1,
+            limittime:-1
         }
     });
     nodeStart.addPort({
@@ -54,12 +64,13 @@ Chart.ready(() => {
     });
 
     //添加结束节点
-    let nodeEnd = chart.addNode('结束', basicX, endY, {
+    let nodeEnd = chart.addNode('终点', basicX, endY, {
         class: 'node-end',
         removable: false,
         data: {
-            name: '结束',
-            nodeType: 0
+            name: '终点',
+            flag: 2,
+            limittime:-1
         }
     });
     nodeEnd.addPort({
@@ -71,7 +82,7 @@ Chart.ready(() => {
         params = params || {};
         params.data = params.data || {};
         params.class = 'node-process';
-        params.data.nodeType = 1; // 流程节点类型
+        params.data.flag = 0; // 流程节点类型
         let node = chart.addNode(name, newX, newY, params);
         node.addPort({
             isSource: true
