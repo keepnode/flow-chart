@@ -163,8 +163,8 @@ ChartNode.prototype.toPlainObj = function() {
 
     let data = $.extend({}, item._data);
     data.nodeId = item._id;
-    data.positionX = item._x;
-    data.positionY = item._y;
+    data.x = item._x;
+    data.y = item._y;
     data.className = item._clsName;
     data.removable = item._options.removable;
 
@@ -186,7 +186,7 @@ let Chart = function(container, options) {
     this._jsPlumb = null; // 多实例支持！
     this._container = container;
     this._nodes = [];
-    this._seedName = 'flow-chart-node';
+    this._seedName = '';
     this._seedId = 0;
 
     this.init(options);
@@ -337,7 +337,7 @@ Chart.prototype.fromJson = function(jsonStr) {
     let connections = jsonObj.connections;
 
     nodes && nodes.forEach(item => {
-        let node = this.addNode(item.name, item.positionX, item.positionY, {
+        let node = this.addNode(item.name, item.x, item.y, {
             class: item.className,
             removable: item.removable,
             id: item.nodeId,

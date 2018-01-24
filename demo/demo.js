@@ -15,7 +15,8 @@ Chart.ready(function() {
             return;
         }
 
-        var infoPanel = $('.right');
+        var infoPanel = $(".right");
+        infoPanel.find("#hidId").val(data.nodeId); //结点ID
         infoPanel.find('#inputTitle').val(data.name || ''); //结点名称
         infoPanel.find('#inputRemark').text(data.description || ''); //结点备注
         infoPanel.find("#ddlOperate").val(data.operate||''); //结点操作
@@ -38,7 +39,7 @@ Chart.ready(function() {
     };
 
     var _createChart = function() {
-        return new Chart($('#demo-chart'), {
+        return new Chart($("#demo-chart"), {
             onNodeClick (data) { // 点击节点时触发
                 _showNodeInfo(data);
                 _current = data.nodeId;
@@ -51,46 +52,68 @@ Chart.ready(function() {
     };
 
     var chart = _createChart();
+    //初始化节点
+    const initNode=function () {
+        //添加开始节点
+        var nodeStart = chart.addNode('起点', basicX, startY, {
+            class: 'node-start',
+            removable: false,
+            data: {
+                name: '起点',
+                flag: 1,
+                limittime:-1
+            }
+        });
+        nodeStart.addPort({
+            isSource: true
+        });
 
-    //添加开始节点
-    var nodeStart = chart.addNode('起点', basicX, startY, {
-        class: 'node-start',
-        removable: false,
-        data: {
-            name: '起点',
-            flag: 1,
-            limittime:-1
-        }
-    });
-    nodeStart.addPort({
-        isSource: true
-    });
+        //添加结束节点
+        var nodeEnd = chart.addNode('终点', basicX, endY, {
+            class: 'node-end',
+            removable: false,
+            data: {
+                name: '终点',
+                flag: 2,
+                limittime:-1
+            }
+        });
+        nodeEnd.addPort({
+            isTarget: true,
+            position: 'Top'
+        });
+    };
+    // 获取URL参数
+    const getQueryString=function(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    };
+    //加载数据
+    const loadData=function () {
+        var id=getQueryString("id");
 
-    //添加结束节点
-    var nodeEnd = chart.addNode('终点', basicX, endY, {
-        class: 'node-end',
-        removable: false,
-        data: {
-            name: '终点',
-            flag: 2,
-            limittime:-1
+        if(id!==undefined&&id>0){
+            var templateData=getTemplateInfo(id);
+            $("#inputTemplateName").val(templateData.name); // 模板名称
+            $("#textTemplateDescription").text(templateData.description); //模板备注
+            $("#inputTemplateCreatorId").val(templateData.creatorid); //创建人
+            $("#inputTemplateCreateTime").val(templateData.createtime); //创建时间
+        }else{
+           initNode();
         }
-    });
-    nodeEnd.addPort({
-        isTarget: true,
-        position: 'Top'
-    });
+    };
     //获取模板信息
     const getTemplateInfo=function(id){
       if(isMock){
         const jsonData = {
-          "id":1,
-          "name": "2016年度市安全生产科技项目(安监局）",
-          "description": "2016年度市安全生产科技项目(安监局）",
-          "creatorid": "235061",
-          "createtime": "2017-12-20 14:50:18",
-          "cdeptid": "",
-          "nodes": [
+            "id":1,
+            "name": "2016年度市安全生产科技项目(安监局）",
+            "description": "2016年度市安全生产科技项目(安监局）",
+            "creatorid": "235061",
+            "createtime": "2017-12-20 14:50:18",
+            "cdeptid": "",
+            "nodes": [
             {
               "id": "68410",
               "name": "起点",
@@ -257,7 +280,13 @@ Chart.ready(function() {
                 }
               ]
             }
-          ]
+          ],
+            "connections":[
+                {
+                    "sourceId": "flow-chart-node31516759228022",
+                    "targetId": "flow-chart-node11516759202181"
+                }
+            ]
         };
         return jsonData;
       }
@@ -273,11 +302,176 @@ Chart.ready(function() {
           }
         });
     };
+    //获取操作结点数据
+    const getOperateInfo=function () {
+        if(isMock){
+            var jsonData={
+                "Success": true,
+                "Message": "",
+                "total": 0,
+                "data": [
+                    {
+                        "value": "申报",
+                        "name": "申报"
+                    },
+                    {
+                        "value": "起草",
+                        "name": "起草"
+                    },
+                    {
+                        "value": "初审",
+                        "name": "初审"
+                    },
+                    {
+                        "value": "受理",
+                        "name": "受理"
+                    },
+                    {
+                        "value": "初审二",
+                        "name": "初审二"
+                    },
+                    {
+                        "value": "承办",
+                        "name": "承办"
+                    },
+                    {
+                        "value": "审核",
+                        "name": "审核"
+                    },
+                    {
+                        "value": "审批",
+                        "name": "审批"
+                    },
+                    {
+                        "value": "立项/办结",
+                        "name": "立项/办结"
+                    },
+                    {
+                        "value": "分组",
+                        "name": "分组"
+                    },
+                    {
+                        "value": "公示",
+                        "name": "公示"
+                    },
+                    {
+                        "value": "审计",
+                        "name": "审计"
+                    },
+                    {
+                        "value": "设置主管处室",
+                        "name": "设置主管处室"
+                    },
+                    {
+                        "value": "专家评审",
+                        "name": "专家评审"
+                    },
+                    {
+                        "value": "联审",
+                        "name": "联审"
+                    },
+                    {
+                        "value": "复核",
+                        "name": "复核"
+                    },
+                    {
+                        "value": "考察",
+                        "name": "考察"
+                    },
+                    {
+                        "value": "会议联审",
+                        "name": "会议联审"
+                    },
+                    {
+                        "value": "行文",
+                        "name": "行文"
+                    },
+                    {
+                        "value": "部门联审",
+                        "name": "部门联审"
+                    },
+                    {
+                        "value": "市领导审签",
+                        "name": "市领导审签"
+                    },
+                    {
+                        "value": "验收",
+                        "name": "验收"
+                    },
+                    {
+                        "value": "确认",
+                        "name": "确认"
+                    },
+                    {
+                        "value": "公布",
+                        "name": "公布"
+                    },
+                    {
+                        "value": "结项",
+                        "name": "结项"
+                    }
+                ]
+            };
+
+            return jsonData;
+        }
+
+        $.ajax({
+            type:"get",
+            url:dataUrl,
+            async:false,
+            data:{
+                allwfoperate:"allwfoperate"
+            },
+            success:function (data) {
+                return JSON.parse(data);
+            }
+        });
+    };
+    //绑定操作结点
+    const bindOperate=function () {
+        var nodes=getOperateInfo().data;
+        var html="";
+        nodes.forEach(function (node) {
+            html+='<option value="'+node.value+'">'+node.name+'</option>';
+        });
+        $("#ddlOperate").append(html);
+    };
+    //获取当前时间
+    const getNowTime=function () {
+        var now = new Date();
+
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+        var hh = now.getHours();            //时
+        var mm = now.getMinutes();          //分
+
+        var clock = year + "-";
+
+        if(month < 10)
+            clock += "0";
+
+        clock += month + "-";
+
+        if(day < 10)
+            clock += "0";
+
+        clock += day + " ";
+
+        if(hh < 10)
+            clock += "0";
+
+        clock += hh + ":";
+        if (mm < 10) clock += '0';
+        clock += mm;
+        return(clock);
+    };
     const addNewTask = function(name, params) {
         params = params || {};
         params.data = params.data || {};
         params.class = 'node-process';
-        params.data.flag = 0; // 流程节点类型
+        params.data.createtime=getNowTime();
         var node = chart.addNode(name, newX, newY, params);
         node.addPort({
             isSource: true
@@ -287,7 +481,6 @@ Chart.ready(function() {
             position: 'Top'
         });
     };
-
     const bindEvent = function() {
          $(".flowchart-panel").on('click', '.btn-add', function(event) {
             var target = $(event.target);
@@ -322,7 +515,8 @@ Chart.ready(function() {
         //     chart.removeNode(_current);
         // });
     };
-
+    bindOperate();
+    loadData();
     bindEvent();
 
     // 使用测试数据
@@ -330,7 +524,7 @@ Chart.ready(function() {
 
     TEST_NODES.forEach(function (node) {
         listHtml+="<li><span class='node-name'>"+node.name+"</span><a class='btn-add' data-id='node.procId' href='javascript:void(0)'>添加</a></li>";
-    })
+    });
     $('.nodes').html(listHtml).find('.btn-add').each(function(index) {
         $(this).data('node', $.extend({}, TEST_NODES[index]));
     });

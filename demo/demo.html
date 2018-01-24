@@ -20,10 +20,30 @@
 <body>
     <div class='flowchart-panel'>
         <div class='left'>
-            <h3>对象库</h3>
-            <input type="text" name="keyword">
-            <ul class='nodes'>
-            </ul>
+            <h2>模板信息</h2>
+                <form>
+                    <div class="form-group-sm">
+                        <label for="inputTemplateName">模板名称</label>
+                        <input type="text" class="form-control" id="inputTemplateName" placeholder="模板标题">
+                    </div>
+                    <div class="form-group-sm">
+                        <label for="textTemplateDescription">模板备注</label>
+                        <textarea class="form-control" id="textTemplateDescription" placeholder="模板备注" rows="5"></textarea>
+                    </div>
+                    <div class="form-group-sm">
+                        <label for="inputTemplateCreatorId">创建人</label>
+                        <input type="text" class="form-control" id="inputTemplateCreatorId" placeholder="模板创建人" disabled="disabled">
+                    </div>
+                    <div class="form-group-sm">
+                        <label for="inputTemplateCreateTime">创建时间</label>
+                        <input type="text" class="form-control" id="inputTemplateCreateTime" placeholder="创建时间" disabled="disabled">
+                    </div>
+                </form>
+            <h2>添加结点</h2>
+            <div>
+                <ul class='nodes'>
+                </ul>
+            </div>
         </div>
         <div class='middle'>
             <div id="demo-chart">
@@ -32,47 +52,36 @@
             </div>
         </div>
         <div class='right'>
-            <form class="form-horizontal">
+            <form>
+                <input type="hidden" id="hidId" />
                 <div class="form-group">
-                    <label for="inputTitle" class="col-sm-2 control-label">结点名称</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputTitle" placeholder="标题">
-                    </div>
+                    <label for="inputTitle" class="control-label">结点名称</label>
+                    <input type="text" class="form-control" id="inputTitle" placeholder="标题">
                 </div>
                 <div class="form-group">
-                    <label for="inputRemark" class="col-sm-2 control-label">结点备注</label>
-                    <div class="col-sm-10">
-                        <textarea class="form-control" id="inputRemark" placeholder="备注"></textarea>
-                    </div>
+                    <label for="inputRemark" class="control-label">结点备注</label>
+                    <textarea class="form-control" id="inputRemark" placeholder="备注" rows="10"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="ddlOperate" class="col-sm-2 control-label">结点操作</label>
-                    <div class="col-sm-10">
-                        <select name="ddlOperate" id="ddlOperate">
-                            <option value="1">测试</option>
-                        </select>
-                    </div>
+                    <label for="ddlOperate" class="control-label">结点操作</label>
+                    <select name="ddlOperate" id="ddlOperate" class="form-control">
+                        <option value="">无</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="inputLimit" class="col-sm-2 control-label">限制时间</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputLimit" placeholder="限制时间，默认0">
-                    </div>
+                    <label for="inputLimit" class="control-label">限制时间</label>
+                    <input type="text" class="form-control" id="inputLimit" placeholder="限制时间，默认0" value="0">
                 </div>
                 <div class="form-group">
-                    <label for="inputCreator" class="col-sm-2 control-label">创建者</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputCreator" placeholder="创建人" disabled="disabled">
-                    </div>
+                    <label for="inputCreator" class="control-label">创建者</label>
+                    <input type="text" class="form-control" id="inputCreator" placeholder="创建人" disabled="disabled">
                 </div>
                 <div class="form-group">
-                    <label for="inputCreateTime" class="col-sm-2 control-label">创建时间</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputCreateTime" placeholder="创建时间" disabled="disabled">
-                    </div>
+                    <label for="inputCreateTime" class="control-label">创建时间</label>
+                    <input type="text" class="form-control" id="inputCreateTime" placeholder="创建时间" disabled="disabled">
                 </div>
-                <button type="submit" class="btn btn-primary">保存</button>
-                <button type="submit" class="btn btn-danger">删除</button>
+                <button type="button" class="btn btn-primary" id="btnSave">保存</button>
+                <button type="button" class="btn btn-danger" id="btnDelete">删除</button>
             </form>
         </div>
     </div>
