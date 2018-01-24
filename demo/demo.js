@@ -159,7 +159,6 @@ Chart.ready(function() {
            newConnect.targetId=connect.targetId;
            result.connections.push(newConnect);
         });
-        console.log("result",result);
         chart.fromJson(JSON.stringify(result));
     };
     //获取模板信息
@@ -524,6 +523,87 @@ Chart.ready(function() {
         });
         $("#ddlOperate").append(html);
     };
+    //获取部门信息数据
+    const getDepartmentInfo=function () {
+        if(isMock){
+            var json={
+                "Success": true,
+                "Message": "",
+                "total": 0,
+                "data": [
+                    {
+                        "value": "68409",
+                        "name": "2016年度市安全生产科技项目(安监局）"
+                    },
+                    {
+                        "value": "68651",
+                        "name": "佛山市（文广新局）流程"
+                    },
+                    {
+                        "value": "68687",
+                        "name": "佛山市（体育局）流程"
+                    },
+                    {
+                        "value": "68975",
+                        "name": "市安全生产科技项目(安监局）审核流程"
+                    },
+                    {
+                        "value": "69500",
+                        "name": "测试模板"
+                    },
+                    {
+                        "value": "67661",
+                        "name": "2017年降低企业用电用气12-01"
+                    },
+                    {
+                        "value": "67819",
+                        "name": "佛山市债券融资扶持(金融局）"
+                    },
+                    {
+                        "value": "68501",
+                        "name": "2017年佛山市发展电子商务(商务局）"
+                    },
+                    {
+                        "value": "68723",
+                        "name": "佛山市（质监局）流程"
+                    },
+                    {
+                        "value": "69228",
+                        "name": "安监局测试流程"
+                    },
+                    {
+                        "value": "68445",
+                        "name": "2016年科技企业孵化器( 科技局)"
+                    },
+                    {
+                        "value": "68557",
+                        "name": "佛山市工商局流程"
+                    }
+                ]
+            };
+
+            return json;
+        }
+        $.ajax({
+            type:"get",
+            url:dataUrl,
+            async:false,
+            data:{
+                getwftemlatedeptid:""
+            },
+            success:function (data) {
+                return JSON.parse(data);
+            }
+        });
+    };
+    const bindDepartment=function () {
+      var nodes=getDepartmentInfo().data;
+        var html="";
+        nodes.forEach(function (node) {
+            html+='<option value="'+node.value+'">'+node.name+'</option>';
+        });
+        $("#ddlDepartment").append(html);
+    };
     //获取当前时间
     const getNowTime=function () {
         var now = new Date();
@@ -578,7 +658,8 @@ Chart.ready(function() {
         });
 
          $(".btn-save").on("click",function () {
-           $('#jsonOutput').val(JSON.stringify(chart.toJson()));
+             $('#jsonOutput').val(JSON.stringify(chart.toJson()));
+             saveTemplateData();
          });
 
          $(".btn-load").on("click",function () {
@@ -595,7 +676,39 @@ Chart.ready(function() {
          });
 
     };
+
+    const saveTemplateData=function(){
+        var data={};
+        data.id=getQueryString("id"); //模板ID
+        data.name=$("#inputTemplateName").val(); //模板名称
+        data.description=$("#textTemplateDescription").text(); //模板描述
+        data.creatorid=$("#inputTemplateCreatorId").val(); //创建人id
+        data.createtime=$("#inputTemplateCreateTime").val(); //创建时间
+        data.cdeptid=$("#ddlDepartment").val();   //主管部门ID
+
+        var chatJson=chart.toJson();
+        console.log("chatJson",chatJson);
+        data.nodes=chatJson.nodes;
+        data.connections=chatJson.connections;
+
+        if(isMock){
+            console.log("save data",data);
+            alert("保存成功！");
+        }else{
+            $.ajax({
+                type:"post",
+                url:dataUrl,
+                data:{
+                    wftemplate:data
+                },
+                success:function (data) {
+                    alert(data);
+                }
+            });
+        }
+    };
     bindOperate();
+    bindDepartment();
     loadData();
     bindEvent();
 
