@@ -114,7 +114,7 @@ Chart.ready(function() {
         return Math.floor(Math.random() * c + n);
     };
     const getRandomNodeId=function () {
-        "0"+(new Date).valueOf()+getRandom(1000,9999);
+        return "0"+(new Date).valueOf()+getRandom(1000,9999);
     };
     const getNodeClass=function (flag) {
         var result="";
@@ -134,6 +134,7 @@ Chart.ready(function() {
     //绑定模板结点数据
     const bindTemplateNodeData=function (json) {
         var nodes=json.nodes;//所有的结点数据
+        var connections=json.connections; //所有的连线数据
         var result={nodes:[],connections:[]};
 
         //结点遍历重新组装
@@ -142,7 +143,23 @@ Chart.ready(function() {
             node.className=getNodeClass(node.flag);
             result.nodes.push(node);
         });
-
+        var newConnect={};
+        connections.forEach(function (connect) {
+           newConnect={};
+           var sourceNode=result.nodes.find(function (node) {
+                return node.id===connect.sourceId;
+            });
+            var targetNode=result.nodes.find(function (node) {
+                return node.id===connect.targetId;
+            });
+           newConnect.connectionId="con_"+getRandom(1000,9999);
+           newConnect.pageSourceId=sourceNode.nodeId;
+           newConnect.pageTargetId=targetNode.nodeId;
+           newConnect.sourceId=connect.sourceId;
+           newConnect.targetId=connect.targetId;
+           result.connections.push(newConnect);
+        });
+        console.log("result",result);
         chart.fromJson(JSON.stringify(result));
     };
     //获取模板信息
@@ -325,8 +342,36 @@ Chart.ready(function() {
           ],
             "connections":[
                 {
-                    "sourceId": "flow-chart-node31516759228022",
-                    "targetId": "flow-chart-node11516759202181"
+                    "sourceId": "68410",
+                    "targetId": "68412"
+                },
+                {
+                    "sourceId": "68412",
+                    "targetId": "68415"
+                },
+                {
+                    "sourceId": "68413",
+                    "targetId": "68414"
+                },
+                {
+                    "sourceId": "68414",
+                    "targetId": "68416"
+                },
+                {
+                    "sourceId": "68415",
+                    "targetId": "68413"
+                },
+                {
+                    "sourceId": "68416",
+                    "targetId": "68417"
+                },
+                {
+                    "sourceId": "68417",
+                    "targetId": "68418"
+                },
+                {
+                    "sourceId": "68418",
+                    "targetId": "68411"
                 }
             ]
         };
