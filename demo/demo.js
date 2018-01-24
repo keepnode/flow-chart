@@ -94,14 +94,69 @@ Chart.ready(function() {
         var id=getQueryString("id");
 
         if(id!==undefined&&id>0){
-            var templateData=getTemplateInfo(id);
-            $("#inputTemplateName").val(templateData.name); // 模板名称
-            $("#textTemplateDescription").text(templateData.description); //模板备注
-            $("#inputTemplateCreatorId").val(templateData.creatorid); //创建人
-            $("#inputTemplateCreateTime").val(templateData.createtime); //创建时间
+            bindTemplateData(id);
         }else{
            initNode();
         }
+    };
+
+    const bindTemplateData=function (id) {
+        var templateData=getTemplateInfo(id);
+        $("#inputTemplateName").val(templateData.name); // 模板名称
+        $("#textTemplateDescription").text(templateData.description); //模板备注
+        $("#inputTemplateCreatorId").val(templateData.creatorid); //创建人
+        $("#inputTemplateCreateTime").val(templateData.createtime); //创建时间
+        //起点
+        var startNode=templateData.nodes.find(function (node) {
+            return node.flag===1;
+        });
+
+        //添加开始节点
+        var nodeStart = chart.addNode(startNode.name, startNode.x, startNode.y, {
+            class: 'node-start',
+            removable: false,
+            data: startNode
+        });
+        nodeStart.addPort({
+            isSource: true
+        });
+
+        //终点
+        var endNode=templateData.nodes.find(function (node) {
+            return node.flag===2;
+        });
+
+        //添加结束节点
+        var nodeEnd = chart.addNode(endNode.name, endNode.x, endNode.y, {
+            class: 'node-end',
+            removable: false,
+            data: endNode
+        });
+        nodeEnd.addPort({
+            isTarget: true,
+            position: 'Top'
+        });
+
+        // 中间结点
+        var middleNodes=templateData.nodes.filter(function (node) {
+            return node.flag===0;
+        });
+        //添加中间结点
+        middleNodes.forEach(function (node) {
+            var nodeMiddle=chart.addNode(node.name, node.x, node.y,{
+                class: 'node-process',
+                removable: true,
+                data: node
+            });
+
+            nodeMiddle.addPort({
+                isSource: true
+            });
+            nodeMiddle.addPort({
+                isTarget: true,
+                position: 'Top'
+            });
+        });
     };
     //获取模板信息
     const getTemplateInfo=function(id){
