@@ -8,9 +8,9 @@ Chart.ready(function() {
     const dataUrl='http://192.168.1.228:5656/Components/WorkflowDesigner/WFDesignerHandler.ashx';
     //是否是模拟数据
     const isMock=true;
-    var _current = null; // 当前选择节点id
+    let _current = null; // 当前选择节点id
 
-    var _showNodeInfo = function(data) {
+    const _showNodeInfo = function(data) {
         if (!data) {
             return;
         }
@@ -26,7 +26,7 @@ Chart.ready(function() {
         // flag 标志(1表示起点，2表示终点，默认为0)
     };
 
-    var _hideNodeInfo = function() {
+    const _hideNodeInfo = function() {
         _showNodeInfo({
             name: '',
             description: '',
@@ -38,7 +38,7 @@ Chart.ready(function() {
         });
     };
 
-    var _createChart = function() {
+    const _createChart = function() {
         return new Chart($("#demo-chart"), {
             onNodeClick (data) { // 点击节点时触发
                 _showNodeInfo(data);
@@ -51,11 +51,11 @@ Chart.ready(function() {
         })
     };
 
-    var chart = _createChart();
+    let chart = _createChart();
     //初始化节点
     const initNode=function () {
         //添加开始节点
-        var nodeStart = chart.addNode('起点', basicX, startY, {
+        const nodeStart = chart.addNode('起点', basicX, startY, {
             class: 'node-start',
             removable: false,
             data: {
@@ -69,7 +69,7 @@ Chart.ready(function() {
         });
 
         //添加结束节点
-        var nodeEnd = chart.addNode('终点', basicX, endY, {
+        const nodeEnd = chart.addNode('终点', basicX, endY, {
             class: 'node-end',
             removable: false,
             data: {
@@ -85,13 +85,13 @@ Chart.ready(function() {
     };
     // 获取URL参数
     const getQueryString=function(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        var r = window.location.search.substr(1).match(reg);
+        const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        const r = window.location.search.substr(1).match(reg);
         if (r != null) return unescape(r[2]); return null;
     };
     //加载数据
     const loadData=function () {
-        var id=getQueryString("id");
+        const id=getQueryString("id");
 
         if(id!==undefined&&id>0){
             bindTemplateData(id);
@@ -101,7 +101,7 @@ Chart.ready(function() {
     };
 
     const bindTemplateData=function (id) {
-        var templateData=getTemplateInfo(id);
+        const templateData=getTemplateInfo(id);
         $("#inputTemplateName").val(templateData.name); // 模板名称
         $("#textTemplateDescription").text(templateData.description); //模板备注
         $("#inputTemplateCreatorId").val(templateData.creatorid); //创建人
@@ -110,14 +110,14 @@ Chart.ready(function() {
         bindTemplateNodeData(templateData);
     };
     const getRandom=function (n,m){
-        var c = m-n+1;
+        let c = m-n+1;
         return Math.floor(Math.random() * c + n);
     };
     const getRandomNodeId=function () {
         return "0"+(new Date).valueOf()+getRandom(1000,9999);
     };
     const getNodeClass=function (flag) {
-        var result="";
+        let result="";
         switch(flag){
             case 1:
                 result="node-start";
@@ -133,9 +133,9 @@ Chart.ready(function() {
     };
     //绑定模板结点数据
     const bindTemplateNodeData=function (json) {
-        var nodes=json.nodes;//所有的结点数据
-        var connections=json.connections; //所有的连线数据
-        var result={nodes:[],connections:[]};
+        const nodes=json.nodes;//所有的结点数据
+        const connections=json.connections; //所有的连线数据
+        let result={nodes:[],connections:[]};
 
         //结点遍历重新组装
         nodes.forEach(function (node) {
@@ -143,13 +143,13 @@ Chart.ready(function() {
             node.className=getNodeClass(node.flag);
             result.nodes.push(node);
         });
-        var newConnect={};
+        let newConnect={};
         connections.forEach(function (connect) {
            newConnect={};
-           var sourceNode=result.nodes.find(function (node) {
+           const sourceNode=result.nodes.find(function (node) {
                 return node.id===connect.sourceId;
             });
-            var targetNode=result.nodes.find(function (node) {
+           const targetNode=result.nodes.find(function (node) {
                 return node.id===connect.targetId;
             });
            newConnect.connectionId="con_"+getRandom(1000,9999);
@@ -391,7 +391,7 @@ Chart.ready(function() {
     //获取操作结点数据
     const getOperateInfo=function () {
         if(isMock){
-            var jsonData={
+            const jsonData={
                 "Success": true,
                 "Message": "",
                 "total": 0,
@@ -516,8 +516,8 @@ Chart.ready(function() {
     };
     //绑定操作结点
     const bindOperate=function () {
-        var nodes=getOperateInfo().data;
-        var html="";
+        const nodes=getOperateInfo().data;
+        let html="";
         nodes.forEach(function (node) {
             html+='<option value="'+node.value+'">'+node.name+'</option>';
         });
@@ -526,7 +526,7 @@ Chart.ready(function() {
     //获取部门信息数据
     const getDepartmentInfo=function () {
         if(isMock){
-            var json={
+            const json={
                 "Success": true,
                 "Message": "",
                 "total": 0,
@@ -597,24 +597,24 @@ Chart.ready(function() {
         });
     };
     const bindDepartment=function () {
-      var nodes=getDepartmentInfo().data;
-        var html="";
-        nodes.forEach(function (node) {
+      const nodes=getDepartmentInfo().data;
+      let html="";
+      nodes.forEach(function (node) {
             html+='<option value="'+node.value+'">'+node.name+'</option>';
-        });
-        $("#ddlDepartment").append(html);
+      });
+      $("#ddlDepartment").append(html);
     };
     //获取当前时间
     const getNowTime=function () {
-        var now = new Date();
+        const now = new Date();
 
-        var year = now.getFullYear();       //年
-        var month = now.getMonth() + 1;     //月
-        var day = now.getDate();            //日
-        var hh = now.getHours();            //时
-        var mm = now.getMinutes();          //分
+        const year = now.getFullYear();       //年
+        const month = now.getMonth() + 1;     //月
+        const day = now.getDate();            //日
+        const hh = now.getHours();            //时
+        const mm = now.getMinutes();          //分
 
-        var clock = year + "-";
+        let clock = year + "-";
 
         if(month < 10)
             clock += "0";
@@ -639,7 +639,7 @@ Chart.ready(function() {
         params.data = params.data || {};
         params.class = 'node-process';
         params.data.createtime=getNowTime();
-        var node = chart.addNode(name, newX, newY, params);
+        let node = chart.addNode(name, newX, newY, params);
         node.addPort({
             isSource: true
         });
@@ -650,8 +650,8 @@ Chart.ready(function() {
     };
     const bindEvent = function() {
          $(".flowchart-panel").on('click', '.btn-add', function(event) {
-            var target = $(event.target);
-            var node = target.data('node');
+            let target = $(event.target);
+            let node = target.data('node');
             addNewTask(node.name, {
                 data: node
             });
@@ -678,7 +678,7 @@ Chart.ready(function() {
     };
 
     const saveTemplateData=function(){
-        var data={};
+        let data={};
         data.id=getQueryString("id"); //模板ID
         data.name=$("#inputTemplateName").val(); //模板名称
         data.description=$("#textTemplateDescription").text(); //模板描述
@@ -686,7 +686,7 @@ Chart.ready(function() {
         data.createtime=$("#inputTemplateCreateTime").val(); //创建时间
         data.cdeptid=$("#ddlDepartment").val();   //主管部门ID
 
-        var chatJson=chart.toJson();
+        const chatJson=chart.toJson();
         console.log("chatJson",chatJson);
         data.nodes=chatJson.nodes;
         data.connections=chatJson.connections;
@@ -713,7 +713,7 @@ Chart.ready(function() {
     bindEvent();
 
     // 使用测试数据
-    var listHtml = '';
+    let listHtml = '';
 
     TEST_NODES.forEach(function (node) {
         listHtml+="<li><span class='node-name'>"+node.name+"</span><a class='btn-add' data-id='node.procId' href='javascript:void(0)'>添加</a></li>";
