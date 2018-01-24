@@ -680,6 +680,30 @@ Chart.ready(function() {
            chart.clear();
          });
 
+         $("#btnSave").on("click",function () {
+             let jsonData=chart.toJson();
+             //获取当前
+             const id=Number.parseInt($("#hidId").val()); //当前节点ID
+             const title=$("#inputTitle").val(); //当前节点的标题
+             const remark=$("#inputRemark").text(); //当前节点的备注
+             const operate=$("#ddlOperate").val(); //当前节点的操作
+             const limit=$("#inputLimit").val(); //当前节点的限制时间
+             const creator=$("#inputCreator").val(); //当前节点的创建人
+             const createTime=$("#inputCreateTime").val(); //当前节点的创建时间
+
+             console.log("jsonData",jsonData);
+             for(let i=0;i<jsonData.nodes.length;i++){
+                 if(jsonData.nodes[i].id===id){
+                     jsonData.nodes[i].name=title;
+                     jsonData.nodes[i].description=remark;
+                     jsonData.nodes[i].operate=operate;
+                     jsonData.nodes[i].limittime=limit;
+                     jsonData.nodes[i].creatorid=creator;
+                     jsonData.nodes[i].createtime=createTime;
+                 }
+             }
+             chart.fromJson(JSON.stringify(jsonData));
+         });
     };
 
     const saveTemplateData=function(){
