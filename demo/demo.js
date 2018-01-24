@@ -15,7 +15,7 @@ Chart.ready(function() {
             return;
         }
 
-        var infoPanel = $(".right");
+        let infoPanel = $(".right");
         infoPanel.find("#hidId").val(data.nodeId); //结点ID
         infoPanel.find('#inputTitle').val(data.name || ''); //结点名称
         infoPanel.find('#inputRemark').text(data.description || ''); //结点备注
@@ -131,6 +131,19 @@ Chart.ready(function() {
         }
         return result;
     };
+
+    const getNodeRemoveAble=function (flag) {
+        let result=true;
+        switch(flag){
+            case 1:
+                result=false;
+                break;
+            case 2:
+                result=false;
+                break;
+        }
+        return result;
+    };
     //绑定模板结点数据
     const bindTemplateNodeData=function (json) {
         const nodes=json.nodes;//所有的结点数据
@@ -139,24 +152,16 @@ Chart.ready(function() {
 
         //结点遍历重新组装
         nodes.forEach(function (node) {
-            node.nodeId=getRandomNodeId();
+            node.nodeId=node.id;
             node.className=getNodeClass(node.flag);
+            node.removable=getNodeRemoveAble(node.flag);
             result.nodes.push(node);
         });
         let newConnect={};
         connections.forEach(function (connect) {
            newConnect={};
-           const sourceNode=result.nodes.find(function (node) {
-                return node.id===connect.sourceId;
-            });
-           const targetNode=result.nodes.find(function (node) {
-                return node.id===connect.targetId;
-            });
-           newConnect.connectionId="con_"+getRandom(1000,9999);
-           newConnect.pageSourceId=sourceNode.nodeId;
-           newConnect.pageTargetId=targetNode.nodeId;
-           newConnect.sourceId=connect.sourceId;
-           newConnect.targetId=connect.targetId;
+           newConnect.pageSourceId=connect.sourceId;
+           newConnect.pageTargetId=connect.targetId;
            result.connections.push(newConnect);
         });
         chart.fromJson(JSON.stringify(result));

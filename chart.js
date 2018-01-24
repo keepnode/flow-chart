@@ -163,6 +163,7 @@ ChartNode.prototype.toPlainObj = function() {
 
     let data = $.extend({}, item._data);
     data.nodeId = item._id;
+    data.id=Number.parseInt(item._id);
     data.x = item._x;
     data.y = item._y;
     data.className = item._clsName;
@@ -193,7 +194,7 @@ let Chart = function(container, options) {
 };
 
 Chart.prototype.nodeId = function() {
-    return this._seedName + (this._seedId++) + (new Date).valueOf();
+    return this._seedName + (new Date).valueOf();
 };
 
 /**

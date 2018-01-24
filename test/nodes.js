@@ -1,6 +1,5 @@
 
 window.TEST_NODES = [{
-    id:0,   //节点ID
     name: '新节点', //模板节点名
     description: '', //描述
     operate:"", //节点操作
