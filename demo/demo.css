@@ -19,6 +19,8 @@ body {
 .flowchart-panel .left {
   padding: 10px;
   width: 200px;
+  overflow-x:hidden;
+  overflow-y: scroll;
   background: #f0f1f9;
   border-right: 1px solid #aaa;
 }
@@ -56,6 +58,8 @@ body {
   width: 300px;
   padding: 10px;
   position: relative;
+  overflow-x:hidden;
+  overflow-y: scroll;
   color: #555;
   border-left: 1px solid #aaa;
 }
