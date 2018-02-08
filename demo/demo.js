@@ -705,7 +705,33 @@ Chart.ready(function() {
              chart.fromJson(JSON.stringify(jsonData));
          });
     };
+  /**
+   * 绑定箭头
+   */
+  const bindArrowEvent=function(){
+      $("#leftArrow").on("click",function(){
+        var checkResult=$(this).hasClass('glyphicon-chevron-left');
+        if(checkResult){
+          $('.left').fadeOut();
+          $(this).removeClass('glyphicon-chevron-left').removeClass('left-arrow').addClass('glyphicon-chevron-right').addClass('left-hide-arrow');
+        }else{
+          $('.left').fadeIn();
+          $(this).removeClass('glyphicon-chevron-right').removeClass('left-hide-arrow').addClass('glyphicon-chevron-left').addClass('left-arrow');
+        }
+      });
 
+      $("#rightArrow").on("click",function(){
+        var checkResult=$(this).hasClass('glyphicon-chevron-right');
+
+        if(checkResult){
+          $('.right').fadeOut();
+          $(this).removeClass('glyphicon-chevron-right').removeClass('right-arrow').addClass('glyphicon-chevron-left').addClass('right-hide-arrow');
+        }else{
+          $('.right').fadeIn();
+          $(this).removeClass('glyphicon-chevron-left').removeClass('right-hide-arrow').addClass('glyphicon-chevron-right').addClass('right-arrow');
+        }
+      });
+    }
     const saveTemplateData=function(){
         let data={};
         data.id=getQueryString("id"); //模板ID
@@ -740,7 +766,7 @@ Chart.ready(function() {
     bindDepartment();
     loadData();
     bindEvent();
-
+    bindArrowEvent();
     // 使用测试数据
     let listHtml = '';
 

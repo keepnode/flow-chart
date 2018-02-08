@@ -16,6 +16,30 @@ body {
   display: flex;
   flex-grow: 1;
 }
+.flowchart-panel .left-arrow {
+  position: absolute;
+  z-index:1;
+  margin-left:190px;
+  margin-top:200px;
+}
+.flowchart-panel .left-hide-arrow {
+  position: absolute;
+  z-index:1;
+  margin-left:5px;
+  margin-top:200px;
+}
+.flowchart-panel .right-arrow{
+  position:absolute;
+  z-index: 1;
+  right:290px;
+  margin-top:200px;
+}
+.flowchart-panel .right-hide-arrow{
+  position:absolute;
+  z-index: 1;
+  right:5px;
+  margin-top:200px;
+}
 .flowchart-panel .left {
   padding: 10px;
   width: 200px;
